@@ -17,7 +17,7 @@ export type IPost = {
   daysAgo: number
 }
 
-export default function Jobs({ data, jobs, loading } : HomeProps) {
+export default function Jobs({ jobs, loading } : HomeProps) {
   const [search, setSearch] = useState('')
   const [filteredJobs, setFilteredJobs] = useState<IPost[]>(jobs)
   
@@ -73,7 +73,7 @@ export default function Jobs({ data, jobs, loading } : HomeProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const dateStringToNumber = (date: string) => {
     const dateNumber = date.replace(/\D/g, "");
     return parseInt(dateNumber);
@@ -110,9 +110,7 @@ export const getStaticProps: GetStaticProps = async () => {
   
   return { 
     props: {
-      data: jsonData, 
-      jobs: cleanJobs, 
-      cleanJobs, 
+      jobs: cleanJobs,
       loading: false 
     }
   }
