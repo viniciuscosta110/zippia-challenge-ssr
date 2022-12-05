@@ -27,19 +27,25 @@ export type IPost = {
 const isServerReq = (req: any) => !req.url.startsWith('/_next');
 
 export default function Jobs({ jobs, loading } : HomeProps) {
+  const [pageLoading, setPageLoading] = useState(true);
   const [search, setSearch] = useState('')
   const [filteredJobs, setFilteredJobs] = useState<IPost[]>(jobs)
   
   const last7DaysFilter = () => {
-    setFilteredJobs(jobs.filter((job) => {
+    setFilteredJobs(jobs?.filter((job) => {
       return job.daysAgo <= 7
     }))
   }
 
   // Filter jobs by Company Name
   useEffect(() => {
-    const newFilteredJobs = jobs.filter((job) => job.companyName.toLowerCase().includes(search.toLowerCase()))
-    setFilteredJobs(newFilteredJobs)
+    if(jobs){
+      const newFilteredJobs = jobs?.filter((job) => job.companyName.toLowerCase().includes(search.toLowerCase()))
+      setPageLoading(false)
+      setFilteredJobs(newFilteredJobs)
+    } else {
+      window.location.reload()
+    }
   }, [search, jobs])
 
   return (
@@ -66,10 +72,10 @@ export default function Jobs({ jobs, loading } : HomeProps) {
           >Last 7 days</Button>
         </Box>
         
-        { loading ? <Loader /> : null }
+        { pageLoading ? <Loader /> : null }
         
         <List>
-          {filteredJobs.map((item, index) => {
+          {filteredJobs?.map((item, index) => {
             return index < 10 ? (
               <ListItem sx={{paddingLeft: '0px'}} key={index}>
                 <JobCard companyName={item.companyName} jobTitle={item.jobTitle} description={item.jobdesc} index={index} />    
