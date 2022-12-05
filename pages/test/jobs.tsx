@@ -24,6 +24,8 @@ export type IPost = {
   daysAgo: number
 }
 
+const isServerReq = (req: any) => !req.url.startsWith('/_next');
+
 export default function Jobs({ jobs, loading } : HomeProps) {
   const [search, setSearch] = useState('')
   const [filteredJobs, setFilteredJobs] = useState<IPost[]>(jobs)
@@ -80,14 +82,14 @@ export default function Jobs({ jobs, loading } : HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req  }) => {
 
   const dateStringToNumber = (date: string) => {
     const dateNumber = date.replace(/\D/g, "");
     return parseInt(dateNumber);
   }
 
-  const data = await fetch('https://www.zippia.com/api/jobs/', {
+  const data = isServerReq(req) ? await fetch('https://www.zippia.com/api/jobs/', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -102,11 +104,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
       numJobs: 20,
       previousListingHashes: []
     })
-  })
+  }) : null
 
-  const jsonData = await data.json();
+  const jsonData = await data?.json();
 
-  const cleanJobs = jsonData.jobs.map((item: any) => {
+  const cleanJobs = jsonData?.jobs.map((item: any) => {
     const daysAgo = dateStringToNumber(item.postedDate)
     return {
       jobTitle: item.jobTitle,

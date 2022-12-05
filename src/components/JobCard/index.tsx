@@ -4,13 +4,19 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cardStyle } from './styles';
 
 export function JobCard({...props}) {
   const { companyName, jobTitle, description, index } = props;
   const [open, setOpen] = useState(false)
   
+  useEffect(() => {
+    const divDescription: HTMLElement | null = document.getElementById(`description-${index}`)
+    if (divDescription) {
+      divDescription.innerHTML = description;
+    }
+  }, [])
   return (
     <Card sx={ cardStyle }>
       <CardContent sx={{ heigth: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -27,6 +33,7 @@ export function JobCard({...props}) {
         </Typography>
         
         <div 
+          id={`description-${index}`}
           style={{ 
             whiteSpace: 'pre-wrap', 
             overflow: 'hidden', 
@@ -36,10 +43,8 @@ export function JobCard({...props}) {
             height: !open ? '200px' : '100%',
             transition: 'height 1s ease' 
           }} 
-          dangerouslySetInnerHTML={{ __html: description }}
         >
-            
-          </div>
+        </div>
 
         <Button onClick={() => setOpen(!open)}>
           {!open ? "Show more" : "Show less"}
