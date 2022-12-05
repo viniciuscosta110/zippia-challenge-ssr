@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 
@@ -81,7 +81,7 @@ export default function Jobs({ jobs, loading } : HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const start = Date.now()
+
   const dateStringToNumber = (date: string) => {
     const dateNumber = date.replace(/\D/g, "");
     return parseInt(dateNumber);
@@ -115,9 +115,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       daysAgo
     }
   })
-  const end = Date.now()
-
-  console.log(`Data fetched. Count: ${cleanJobs.length}. Time: ${end - start}ms`)
   
   return { 
     props: {

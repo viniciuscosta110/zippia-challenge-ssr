@@ -1,5 +1,9 @@
-import { Typography, Card, CardContent, Button } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+
 import { useState } from 'react';
 import { cardStyle } from './styles';
 

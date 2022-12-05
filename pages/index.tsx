@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Home({...props}) {
   return (
     <h2>
-      <Link href={'/test/jobs'}>Go to Jobs</Link>
+      <Link prefetch={false} href={'/test/jobs'}>Go to Jobs</Link>
     </h2>
   )
 }
