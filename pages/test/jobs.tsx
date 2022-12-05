@@ -1,9 +1,16 @@
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { Box, Typography, Input, Button, List, ListItem } from '@mui/material'
 import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+
 import { JobCard } from '../../src/components/JobCard';
 import { Loader } from '../../src/components/Loader';
-import Link from 'next/link';
 
 interface HomeProps {
   data: any;
@@ -74,6 +81,7 @@ export default function Jobs({ jobs, loading } : HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const start = Date.now()
   const dateStringToNumber = (date: string) => {
     const dateNumber = date.replace(/\D/g, "");
     return parseInt(dateNumber);
@@ -107,6 +115,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
       daysAgo
     }
   })
+  const end = Date.now()
+
+  console.log(`Data fetched. Count: ${cleanJobs.length}. Time: ${end - start}ms`)
   
   return { 
     props: {
