@@ -11,6 +11,7 @@ import ListItem from '@mui/material/ListItem';
 
 import { JobCard } from '../../src/components/JobCard';
 import { Loader } from '../../src/components/Loader';
+import { useFetch } from '../../src/api/useFetch';
 
 interface HomeProps {
   data: any;
@@ -90,44 +91,13 @@ export default function Jobs({ jobs, loading } : HomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async ({ req  }) => {
 
-  const dateStringToNumber = (date: string) => {
-    const dateNumber = date.replace(/\D/g, "");
-    return parseInt(dateNumber);
-  }
-
-  const data = isServerReq(req) ? await fetch('https://www.zippia.com/api/jobs/', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      companySkills: true,
-      dismissedListingHashes: [],
-      fetchJobDesc: true,
-      jobTitle: 'Business Analyst',
-      locations: [''],
-      numJobs: 20,
-      previousListingHashes: []
-    })
-  }) : null
-
-  const jsonData = await data?.json();
-
-  const cleanJobs = jsonData?.jobs.map((item: any) => {
-    const daysAgo = dateStringToNumber(item.postedDate)
-    return {
-      jobTitle: item.jobTitle,
-      companyName: item.companyName,
-      jobdesc: item.jobDescription,
-      daysAgo
-    }
-  })
+  const jobsData = isServerReq(req) ? await useFetch({ url: 'https://www.zippia.com/api/jobs/', jobTitle: 'Business Analyst', location: '' }) : null
+  const [jobs, loading] = jobsData?.jobs ? [jobsData.jobs, jobsData.loading] : [null, true]
   
-  return { 
+  return {
     props: {
-      jobs: cleanJobs,
-      loading: false 
+      jobs,
+      loading
     }
   }
 }
