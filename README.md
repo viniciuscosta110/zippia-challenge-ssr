@@ -10,5 +10,4 @@
 - [x] Try to add as many comments as you could explaining your code.
 
 ## Deploy
-I deploy this challeng with vercel:
-https://zippia-challenge-ssr.vercel.app/
+I deploy this challenge with vercel: https://zippia-challenge-ssr.vercel.app/
